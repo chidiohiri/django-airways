@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <!-- Personal Info Card -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Passenger Information</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-person me-2"></i>Full Name:</strong> {{ checkout.first_name }} {{ checkout.surname }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-envelope me-2"></i>Email:</strong> {{ checkout.email }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-phone me-2"></i>Phone:</strong> {{ checkout.phone }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-gender-ambiguous me-2"></i>Gender:</strong> {{ checkout.gender }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-ticket-perforated me-2"></i>Class:</strong> {{ checkout.select_travel_class.name }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-hash me-2"></i>Booking ID:</strong> {{ checkout.unique_id }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flight Info Card -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Flight Details</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-airplane me-2"></i>Flight:</strong> {{ checkout.flight_schedule.plane.name }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-geo-alt me-2"></i>From:</strong> {{ checkout.flight_schedule.from_location }} 
+                        <span class="ms-3"><strong><i class="bi bi-arrow-right"></i></strong></span> 
+                        {{ checkout.flight_schedule.to_location }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-calendar-date me-2"></i>Date:</strong> {{ checkout.flight_schedule.departure_date }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-clock me-2"></i>Time:</strong> {{ checkout.flight_schedule.departure_time }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-hourglass-split me-2"></i>ETA:</strong> {{ checkout.flight_schedule.eta }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-briefcase me-2"></i>Baggage Allowance:</strong> {{ checkout.flight_schedule.max_baggage_weight }} kg
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-coin me-2"></i>Base Fare:</strong> ₦{{ checkout.flight_schedule.amount|intcomma }}
+                    </li>
+                    {% if checkout.select_travel_class.extra_fee %}
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-plus-circle me-2"></i>Extra Fee:</strong> ₦{{ checkout.select_travel_class.extra_fee|intcomma }}
+                    </li>
+                    {% endif %}
+                    <li class="list-group-item">
+                        <strong><i class="bi bi-calculator me-2"></i>Total:</strong> 
+                        <span class="text-success fw-bold">₦{{ checkout.total_amount|intcomma }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div>
+    <a href="#" class="btn btn-primary btn-lg" onclick="window.print(); return false;">Print</a>
+</div>
+{% endblock content %}

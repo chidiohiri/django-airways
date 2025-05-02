@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="mb-4">
+    <div class="row align-items-md-stretch">
+        <div class="col-md-8">
+            <div class="h-100 p-5 text-white bg-dark rounded-3">
+                <h2>Book a Flight within minutes!</h2>
+                <p>
+                    Explore thousands of available flights and find one that fits your schedule and budget! Every flight
+                    is verified and on-time. Be sure to double-check your travel details and pack accordingly. Wishing
+                    you smooth skies and a pleasant journey!
+
+
+                </p>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="h-100 p-5 bg-light border rounded-3">
+                <h2>Welcome Onboard</h2>
+                <p>
+                    Search through a wide range of available flights and choose the one that best suits your travel plans.
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center ">
+                <h6 class="mb-0">Filter Jobs</h6>
+
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-2">
+                                <label for="exampleInputEmail1" class="form-label">Depature Date</label>
+                                {% render_field filter.form.departure_date type="date" class="form-control" %}
+                            </div>
+                            <div class="mb-2">
+                                <label for="exampleInputEmail1" class="form-label">From Location</label>
+                                {% render_field filter.form.from_location class="form-control" %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">To Location</label>
+                                {% render_field filter.form.to_location class="form-control" %}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center ">
+                <h6 class="mb-0">All Jobs</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for s in fs %}
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="">
+                                    <h5 class="mb-1 ">{{s.plane.name}} <i>({{s.from_location}} to {{s.to_location}})</i>
+                                    </h5>
+                                    <p class="card-text">
+                                        {{s.departure_date}}, {{s.departure_time|title}}
+                                    </p>
+                                    <div class="text-muted small d-flex flex-wrap gap-3 align-items-center">
+                                        <span><i class="bi bi-coin"></i> {{s.amount|intcomma}} <small>NGN</small></span>
+                                        <span><i class="bi bi-geo-alt"></i> {{s.from_location}}, NG</span>
+                                        <span><i class="bi bi-clock"></i> {{s.eta}}</span>
+                                        <span><i class="bi bi-briefcase"></i> {{s.max_baggage_weight}}
+                                            <small>KG</small></span>
+                                    </div>
+                                    <a href="{% url 'book-flight' s.pk %}" class="btn btn-primary btn-sm mt-3">Book
+                                        Flight</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card-footer bg-white">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        {% if fs.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ fs.previous_page_number }}">Previous</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        {% endif %}
+
+                        {% if fs.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ fs.next_page_number }}">Next</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

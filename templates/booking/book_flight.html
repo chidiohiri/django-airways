@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center ">
+                <h6 class="mb-0">Book Flight - {{flight_schedule.plane.name}} <i>({{flight_schedule.from_location}} to {{flight_schedule.to_location}}). {{flight_schedule.departure_date}}, {{flight_schedule.departure_time|title}}</i></h6>
+
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">First Name</label>
+                                        {% render_field form.first_name class="form-control" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Surname</label>
+                                        {% render_field form.surname class="form-control" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Gender</label>
+                                        {% render_field form.gender class="form-control" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Email ID</label>
+                                        {% render_field form.email class="form-control" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Phone Number</label>
+                                        {% render_field form.phone class="form-control" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Select Travel Class</label>
+                                        {% render_field form.select_travel_class class="form-control" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Flight Cost Summary</h6>
+            </div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Base Amount</div>
+                            Standard flight cost
+                        </div>
+                        <span class="badge bg-primary rounded-pill" id="base-amount">₦{{ flight_schedule.amount }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Business Class Fee</div>
+                            Applies only if selected
+                        </div>
+                        <span class="badge bg-primary rounded-pill" id="business-fee">₦0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Total Amount</div>
+                            Final payable amount
+                        </div>
+                        <span class="badge bg-success rounded-pill" id="total-amount">₦{{ flight_schedule.amount }}</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const baseAmount = {{ flight_schedule.amount }};
+    const businessFee = {{ business_extra_fee|default:0 }};
+
+    const classSelect = document.getElementById("id_select_travel_class");
+    const baseDisplay = document.getElementById("base-amount");
+    const feeDisplay = document.getElementById("business-fee");
+    const totalDisplay = document.getElementById("total-amount");
+
+    function updateAmounts() {
+        const selected = classSelect.options[classSelect.selectedIndex].text;
+        let extra = selected === "Business" ? businessFee : 0;
+        feeDisplay.textContent = `₦${extra}`;
+        totalDisplay.textContent = `₦${baseAmount + extra}`;
+    }
+
+    classSelect.addEventListener("change", updateAmounts);
+    updateAmounts(); // Initial call
+</script>
+
+{% endblock content %}
