@@ -55,7 +55,7 @@ Run server on your terminal (cmd or powershell). Open your browser and navigate 
 
 ### Core Features
 
--Flight Search with Filtering and Pagination: Users can browse available flight schedules, filter by departure/arrival locations and dates, and view results paginated for better usability.
+- Flight Search with Filtering and Pagination: Users can browse available flight schedules, filter by departure/arrival locations and dates, and view results paginated for better usability.
 
 - Service Selection and Dynamic Pricing: Customers can select a travel class (e.g., Business or Economy) and the system automatically calculates the total cost based on class-specific fees.
 
